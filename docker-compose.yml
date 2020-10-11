@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  app:
+    build: ./docker/python
+    volumes:
+      - ./app:/app
+    environment:
+      TZ: Asia/Tokyo
+    networks:
+      default:
+        ipv4_address: 172.16.3.2
+    tty: true
+    # restart: always
+  selenium-chrome:
+    build: ./docker/selenium-chrome
+    ports:
+      - 4444:4444
+      - 5900:5900
+    environment:
+      TZ: Asia/Tokyo
+    networks:
+      default:
+        ipv4_address: 172.16.3.3
+    # restart: always
+networks:
+  default:
+    name: python-selenium
+    driver: bridge
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.3.0/24
